@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>摸了么</title>
+    <title>摸了吗</title>
     <style>
         :root {
             --bg-color: #f4f1ea;
@@ -27,21 +27,21 @@
         }
 
         .app-container {
-            width: 90%;
-            max-width: 400px;
+            width: 95%;
+            max-width: 420px;
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 35px 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border-radius: 24px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
             border: 1px solid var(--border-color);
         }
 
-        header { text-align: center; margin-bottom: 30px; }
-        h1 { font-size: 26px; color: var(--accent-green); letter-spacing: 3px; font-weight: 500; }
+        header { text-align: center; margin-bottom: 25px; }
+        h1 { font-size: 28px; color: var(--accent-green); letter-spacing: 4px; font-weight: 500; }
         .subtitle { font-size: 13px; color: #b5b1a8; margin-top: 8px; }
 
         .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 13px; color: #888; margin-bottom: 8px; }
+        label { display: block; font-size: 13px; color: #888; margin-bottom: 8px; font-weight: 500;}
         input {
             width: 100%;
             padding: 14px;
@@ -53,28 +53,32 @@
             font-size: 16px;
         }
 
+        /* 优化后的网格：支持更多项目 */
         .category-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+            max-height: 220px;
+            overflow-y: auto;
+            padding: 5px;
         }
         .cat-item {
-            padding: 12px;
+            padding: 10px 5px;
             border: 1px solid var(--border-color);
             border-radius: 10px;
             text-align: center;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
             background: #fff;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s;
+            color: #888;
         }
         .cat-item.active {
             background-color: var(--accent-blue);
             color: white;
             border-color: var(--accent-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(161, 176, 188, 0.3);
+            transform: scale(1.05);
         }
 
         .btn-start {
@@ -87,14 +91,15 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
+            box-shadow: 0 4px 15px rgba(159, 172, 150, 0.3);
         }
 
         #running-zone { display: none; text-align: center; }
         .money-display {
-            font-size: 44px;
+            font-size: 48px;
             font-weight: 300;
             color: var(--text-main);
-            margin: 25px 0;
+            margin: 20px 0;
             font-family: "Georgia", serif;
         }
         .timer-info {
@@ -123,7 +128,7 @@
     <div class="app-container">
         <div id="setup-zone">
             <header>
-                <h1>摸了么</h1>
+                <h1>摸了吗</h1>
                 <p class="subtitle">让摸鱼的每一秒都有价值</p>
             </header>
 
@@ -132,12 +137,17 @@
                 <input type="number" id="salary" value="12000">
             </div>
 
-            <label>当前摸鱼项目</label>
+            <label>请选择摸鱼流派</label>
             <div class="category-grid" id="cat-grid">
                 <div class="cat-item active" onclick="selectCat(this)">带薪如厕</div>
                 <div class="cat-item" onclick="selectCat(this)">工位神游</div>
                 <div class="cat-item" onclick="selectCat(this)">虚假会议</div>
-                <div class="cat-item" onclick="selectCat(this)">水群吐槽</div>
+                <div class="cat-item" onclick="selectCat(this)">饮水工程</div>
+                <div class="cat-item" onclick="selectCat(this)">研读文档</div>
+                <div class="cat-item" onclick="selectCat(this)">系统更新</div>
+                <div class="cat-item" onclick="selectCat(this)">修复环境</div>
+                <div class="cat-item" onclick="selectCat(this)">灵感捕捉</div>
+                <div class="cat-item" onclick="selectCat(this)">差旅规划</div>
             </div>
 
             <button class="btn-start" onclick="start()">开启收益模式</button>
@@ -165,21 +175,22 @@
         let timer, startTime, secondRate, activeCat = "带薪如厕";
 
         const dasKapitalQuotes = [
-            "资本是死劳动，它像吸血鬼一样，只有吮吸活劳动才有生命，吮吸的活劳动越多，它的生命就越旺盛。",
-            "资本来到世间，从头到脚，每个毛孔都滴着血和肮脏的东西。",
+            "资本是死劳动，它像吸血鬼一样，只有吮吸活劳动才有生命。",
+            "时间是人类发展的空间。一个人如果没有自由的时间，他连牛马都不如。",
             "工作日不仅有生理界限，而且有道德界限。",
-            "时间是人类发展的空间。一个人如果没有一分钟自由的时间，他连牛马都不如。",
-            "资本家只有作为人格化的资本，他才有历史的价值。",
+            "资本来到世间，每个毛孔都滴着血和肮脏的东西。",
             "工人不仅在劳动时生产他人的价值，而且他在不劳动时也为他人生产价值。",
-            "在资本主义制度内部，一切提高社会劳动生产力的方法都是靠牺牲工人个人来实现的。",
-            "一旦有适当的利润，资本就胆大起来。如果有10%的利润，它就保证到处被使用。"
+            "一旦有适当的利润，资本就胆大起来。有50%的利润，它就铤而走险。",
+            "在资本主义制度内部，一切提高生产力的方法都是靠牺牲工人个人来实现的。",
+            "由于资本的积聚，工人的命运不管他的报酬高低如何，必然要趋于恶化。"
         ];
 
         const bossScenarios = [
-            { title: "2026年Q1供应链链路穿透分析", body: "<p>本报告旨在剖析当前供应链侧的边际成本溢价，通过精细化运营实现增长...</p>" },
+            { title: "2026年Q1供应链链路穿透分析", body: "<p>本报告旨在剖析当前供应链侧的边际成本溢价...</p>" },
             { title: "系统底层分布式架构演进说明", body: "<p style='font-family:monospace;'>[INFO] Initializing clusters... [WARN] Cache hit rate dropped to 64.2%...</p>" },
-            { title: "私域流量池沉淀方法论调研", body: "<p>近期竞品加码私域赛道，我们需通过高频触达建立用户心智，关注情绪价值传递。</p>" },
-            { title: "内部合规性检查标准化手册", body: "<p>第34条：各级员工需严格遵守企业通讯工具即时性要求，紧急需求需在15分钟内反馈。</p>" }
+            { title: "私域流量池沉淀方法论调研", body: "<p>我们需通过高频触达建立用户心智，关注情绪价值传递。</p>" },
+            { title: "内部合规性检查标准化手册", body: "<p>第34条：各级员工需严格遵守企业通讯工具即时性要求。</p>" },
+            { title: "全网竞品流量分发策略深度解码", body: "<p>基于AARRR模型，我们发现对手在唤回链路上的成本投入占比超过30%...</p>"}
         ];
 
         function selectCat(el) {
@@ -216,7 +227,7 @@
             
             alert(
                 "结算成功！\n" +
-                "您刚才在【" + activeCat + "】期间，成功从资本家手中夺回了 " + total + " 的剩余价值。\n\n" +
+                "您刚才在【" + activeCat + "】期间，成功夺回了 " + total + " 的剩余价值。\n\n" +
                 "LQ提醒你：\n“" + quote + "”"
             );
             location.reload();
@@ -229,10 +240,14 @@
                 mask.style.display = 'none';
             } else {
                 const scene = bossScenarios[Math.floor(Math.random() * bossScenarios.length)];
-                area.innerHTML = `<h2 style="margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px;">${scene.title}</h2>${scene.body}<p style="color:#eee; font-size:10px; margin-top:50px;">正在深度扫描数据链路...</p>`;
+                area.innerHTML = `<h2 style="margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px;">${scene.title}</h2>${scene.body}<p style="color:#eee; font-size:10px; margin-top:50px;">正在扫描...</p>`;
                 mask.style.display = 'block';
             }
         }
     </script>
 </body>
 </html>
+     
+       
+       
+     
