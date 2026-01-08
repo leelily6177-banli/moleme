@@ -109,17 +109,17 @@
                 <input type="number" id="salary" value="5000">
             </div>
 
-            <label>摸鱼流派</label>
+            <label>摸鱼项目</label>
             <div class="category-grid" id="cat-grid">
                 <div class="cat-item active" onclick="sel(this)">带薪拉屎</div>
                 <div class="cat-item" onclick="sel(this)">工位神游</div>
                 <div class="cat-item" onclick="sel(this)">饮水工程</div>
-                <div class="cat-item" onclick="sel(this)">系统更新</div>
+                <div class="cat-item" onclick="sel(this)">水群吐槽</div>
                 <div class="cat-item" onclick="sel(this)">虚假通勤</div>
                 <div class="cat-item custom-add" id="custom-btn" onclick="addCustom()">+ 自定义</div>
             </div>
 
-            <button class="btn-start" onclick="start()">进入深海模式</button>
+            <button class="btn-start" onclick="start()">开始摸鱼</button>
             <div style="margin-top:15px; font-size:10px; color:#ccc; text-align:center;">
                 当前累计回收时长：<span id="total-min">0</span> 分钟
             </div>
@@ -134,14 +134,14 @@
             </div>
             <div style="display:flex; gap:10px;">
                 <button class="btn-boss" onclick="boss()">老板来了</button>
-                <button class="btn-stop" onclick="stop()">结算收网</button>
+                <button class="btn-stop" onclick="stop()">收益结算</button>
             </div>
         </div>
     </div>
 
-    <!-- 称号图鉴弹窗 -->
+    <!-- 段位图鉴弹窗 -->
     <div id="rank-overlay" class="overlay" onclick="closeOverlays()">
-        <h2 style="text-align:center; color:var(--accent-rose); margin-bottom:20px;">深海摸鱼图鉴</h2>
+        <h2 style="text-align:center; color:var(--accent-rose); margin-bottom:20px;">摸鱼段位图鉴</h2>
         <div id="rank-list-content"></div>
         <p style="text-align:center; font-size:12px; color:#ccc; margin-top:20px;">点击任意位置返回</p>
     </div>
