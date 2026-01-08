@@ -31,37 +31,48 @@
             max-width: 420px;
             background: var(--card-bg);
             border-radius: 24px;
-            padding: 30px 20px;
+            padding: 25px 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.05);
             border: 1px solid var(--border-color);
+            position: relative;
         }
 
-        header { text-align: center; margin-bottom: 25px; }
-        h1 { font-size: 28px; color: var(--accent-green); letter-spacing: 4px; font-weight: 500; }
-        .subtitle { font-size: 13px; color: #b5b1a8; margin-top: 8px; }
+        /* 段位勋章样式 */
+        .rank-badge {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: var(--accent-rose);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(194, 157, 145, 0.4);
+        }
 
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 13px; color: #888; margin-bottom: 8px; font-weight: 500;}
+        header { text-align: center; margin-bottom: 20px; }
+        h1 { font-size: 26px; color: var(--accent-green); letter-spacing: 4px; font-weight: 500; }
+        .subtitle { font-size: 12px; color: #b5b1a8; margin-top: 5px; }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 12px; color: #888; margin-bottom: 5px; font-weight: 500;}
         input {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 10px;
             background-color: #faf9f6;
             color: var(--text-main);
             outline: none;
             font-size: 16px;
         }
 
-        /* 优化后的网格：支持更多项目 */
         .category-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 25px;
-            max-height: 220px;
-            overflow-y: auto;
-            padding: 5px;
+            gap: 8px;
+            margin-bottom: 20px;
         }
         .cat-item {
             padding: 10px 5px;
@@ -71,19 +82,19 @@
             font-size: 12px;
             cursor: pointer;
             background: #fff;
-            transition: all 0.2s;
             color: #888;
         }
         .cat-item.active {
             background-color: var(--accent-blue);
             color: white;
             border-color: var(--accent-blue);
-            transform: scale(1.05);
         }
+        /* 自定义输入项样式 */
+        .custom-item { border-style: dashed; border-width: 2px; }
 
         .btn-start {
             width: 100%;
-            padding: 16px;
+            padding: 15px;
             background-color: var(--accent-green);
             color: white;
             border: none;
@@ -91,25 +102,24 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(159, 172, 150, 0.3);
         }
 
         #running-zone { display: none; text-align: center; }
         .money-display {
-            font-size: 48px;
+            font-size: 44px;
             font-weight: 300;
             color: var(--text-main);
-            margin: 20px 0;
+            margin: 15px 0;
             font-family: "Georgia", serif;
         }
         .timer-info {
             display: flex; justify-content: space-around;
-            margin-bottom: 30px; font-size: 14px; color: #999;
+            margin-bottom: 25px; font-size: 13px; color: #999;
         }
 
-        .action-btns { display: flex; gap: 12px; }
+        .action-btns { display: flex; gap: 10px; }
         .btn-secondary {
-            flex: 1; padding: 14px; border-radius: 10px;
+            flex: 1; padding: 12px; border-radius: 10px;
             border: 1px solid var(--border-color);
             background: #fff; color: #888; cursor: pointer;
         }
@@ -119,13 +129,16 @@
             display: none; position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: #fff; z-index: 9999; padding: 30px;
-            overflow-y: auto; color: #333; font-family: 'Segoe UI', sans-serif;
+            overflow-y: auto; color: #333;
         }
     </style>
 </head>
 <body>
 
     <div class="app-container">
+        <!-- 段位勋章 -->
+        <div class="rank-badge" id="rank-display">摸鱼新兵</div>
+
         <div id="setup-zone">
             <header>
                 <h1>摸了吗</h1>
@@ -137,28 +150,26 @@
                 <input type="number" id="salary" value="12000">
             </div>
 
-            <label>请选择摸鱼流派</label>
+            <label>摸鱼项目</label>
             <div class="category-grid" id="cat-grid">
                 <div class="cat-item active" onclick="selectCat(this)">带薪如厕</div>
                 <div class="cat-item" onclick="selectCat(this)">工位神游</div>
-                <div class="cat-item" onclick="selectCat(this)">虚假会议</div>
                 <div class="cat-item" onclick="selectCat(this)">饮水工程</div>
-                <div class="cat-item" onclick="selectCat(this)">研读文档</div>
                 <div class="cat-item" onclick="selectCat(this)">系统更新</div>
-                <div class="cat-item" onclick="selectCat(this)">修复环境</div>
-                <div class="cat-item" onclick="selectCat(this)">灵感捕捉</div>
-                <div class="cat-item" onclick="selectCat(this)">差旅规划</div>
+                <div class="cat-item" onclick="selectCat(this)">研读文档</div>
+                <div class="cat-item custom-item" id="custom-trigger" onclick="handleCustom()">+ 自定义</div>
             </div>
 
             <button class="btn-start" onclick="start()">开启收益模式</button>
+            <p style="font-size: 10px; color: #ccc; text-align: center; margin-top: 15px;">累计摸鱼: <span id="total-time-display">0</span> 分钟</p>
         </div>
 
         <div id="running-zone">
             <div id="current-task" style="color: var(--accent-green); font-size: 14px; font-weight: 500;">正在进行：带薪如厕</div>
             <div class="money-display" id="money-val">￥0.0000</div>
             <div class="timer-info">
-                <div>时长: <span id="time-val" style="color:#666">00:00:00</span></div>
-                <div>时薪: <span id="rate-val" style="color:#666">0.00</span>元</div>
+                <div>时长: <span id="time-val">00:00:00</span></div>
+                <div>时薪: <span id="rate-val">0.00</span>元</div>
             </div>
             <div class="action-btns">
                 <button class="btn-secondary btn-boss" onclick="toggleBoss()">老板来了</button>
@@ -173,25 +184,41 @@
 
     <script>
         let timer, startTime, secondRate, activeCat = "带薪如厕";
+        let totalSeconds = parseInt(localStorage.getItem('mulema_total_seconds')) || 0;
 
         const dasKapitalQuotes = [
             "资本是死劳动，它像吸血鬼一样，只有吮吸活劳动才有生命。",
             "时间是人类发展的空间。一个人如果没有自由的时间，他连牛马都不如。",
             "工作日不仅有生理界限，而且有道德界限。",
-            "资本来到世间，每个毛孔都滴着血和肮脏的东西。",
             "工人不仅在劳动时生产他人的价值，而且他在不劳动时也为他人生产价值。",
-            "一旦有适当的利润，资本就胆大起来。有50%的利润，它就铤而走险。",
-            "在资本主义制度内部，一切提高生产力的方法都是靠牺牲工人个人来实现的。",
-            "由于资本的积聚，工人的命运不管他的报酬高低如何，必然要趋于恶化。"
+            "在资本主义制度内部，一切提高生产力的方法都是靠牺牲工人个人来实现的。"
         ];
 
-        const bossScenarios = [
-            { title: "2026年Q1供应链链路穿透分析", body: "<p>本报告旨在剖析当前供应链侧的边际成本溢价...</p>" },
-            { title: "系统底层分布式架构演进说明", body: "<p style='font-family:monospace;'>[INFO] Initializing clusters... [WARN] Cache hit rate dropped to 64.2%...</p>" },
-            { title: "私域流量池沉淀方法论调研", body: "<p>我们需通过高频触达建立用户心智，关注情绪价值传递。</p>" },
-            { title: "内部合规性检查标准化手册", body: "<p>第34条：各级员工需严格遵守企业通讯工具即时性要求。</p>" },
-            { title: "全网竞品流量分发策略深度解码", body: "<p>基于AARRR模型，我们发现对手在唤回链路上的成本投入占比超过30%...</p>"}
-        ];
+        // 初始化显示
+        updateRankDisplay();
+
+        function updateRankDisplay() {
+            const mins = Math.floor(totalSeconds / 60);
+            const hours = totalSeconds / 3600;
+            document.getElementById('total-time-display').innerText = mins;
+            
+            let rank = "摸鱼新兵";
+            if(hours >= 100) rank = "摸鱼之神";
+            else if(hours >= 20) rank = "深海巨鲨";
+            else if(hours >= 5) rank = "划水大师";
+            else if(hours >= 1) rank = "老练咸鱼";
+            
+            document.getElementById('rank-display').innerText = rank;
+        }
+
+        function handleCustom() {
+            const userTask = prompt("请输入你的奇葩摸鱼项目：", "发呆思考人生");
+            if (userTask) {
+                const trigger = document.getElementById('custom-trigger');
+                trigger.innerText = userTask;
+                selectCat(trigger);
+            }
+        }
 
         function selectCat(el) {
             document.querySelectorAll('.cat-item').forEach(item => item.classList.remove('active'));
@@ -222,12 +249,18 @@
 
         function stop() {
             clearInterval(timer);
-            const total = document.getElementById('money-val').innerText;
+            const elapsedSeconds = Math.floor((new Date() - startTime) / 1000);
+            
+            // 更新累计时间并保存
+            totalSeconds += elapsedSeconds;
+            localStorage.setItem('mulema_total_seconds', totalSeconds);
+            
+            const totalMoney = document.getElementById('money-val').innerText;
             const quote = dasKapitalQuotes[Math.floor(Math.random() * dasKapitalQuotes.length)];
             
             alert(
                 "结算成功！\n" +
-                "您刚才在【" + activeCat + "】期间，成功夺回了 " + total + " 的剩余价值。\n\n" +
+                "您刚才在【" + activeCat + "】期间，成功夺回了 " + totalMoney + " 的剩余价值。\n\n" +
                 "LQ提醒你：\n“" + quote + "”"
             );
             location.reload();
@@ -239,15 +272,10 @@
             if (mask.style.display === 'block') {
                 mask.style.display = 'none';
             } else {
-                const scene = bossScenarios[Math.floor(Math.random() * bossScenarios.length)];
-                area.innerHTML = `<h2 style="margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px;">${scene.title}</h2>${scene.body}<p style="color:#eee; font-size:10px; margin-top:50px;">正在扫描...</p>`;
+                area.innerHTML = `<h2 style="margin-bottom:20px;">Q1 季度审计报告</h2><p>基于当前宏观环境，我们需持续优化链路成本...</p>`;
                 mask.style.display = 'block';
             }
         }
     </script>
 </body>
 </html>
-     
-       
-       
-     
